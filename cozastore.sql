@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS cozastore;
+cozastoreDROP DATABASE IF EXISTS cozastore;
 CREATE DATABASE cozastore;
 USE cozastore;
 
