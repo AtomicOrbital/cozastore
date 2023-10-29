@@ -1,6 +1,7 @@
 package com.example.cozastore.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "productdetail")
 public class ProductDetailEntity {
@@ -25,6 +26,9 @@ public class ProductDetailEntity {
     @ManyToOne
     @JoinColumn(name = "size_id")
     private SizeEntity idSize;
+
+    @OneToMany(mappedBy = "productDetail")
+    private List<OrderDetailEntity> orderDetails;
 
     public int getIdProductDetail() {
         return idProductDetail;

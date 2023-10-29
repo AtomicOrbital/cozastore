@@ -1,6 +1,9 @@
 package com.example.cozastore.entity;
 
+import org.hibernate.criterion.Order;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "users")
 public class UserEntity {
@@ -18,6 +21,14 @@ public class UserEntity {
     @JoinColumn(name = "id_role")
     private RoleEntity role;
 
+    @OneToMany(mappedBy = "user")
+    private List<BlogEntity> blogs;
+
+    @OneToMany(mappedBy = "user")
+    private List<OrderEntity> orders;
+
+    @OneToMany(mappedBy = "user")
+    private List<OrderDetailEntity> orderDetails;
 
     public UserEntity(){
 
