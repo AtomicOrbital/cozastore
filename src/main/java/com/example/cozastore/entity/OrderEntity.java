@@ -9,7 +9,7 @@ public class OrderEntity {
     private int id;
 
     @Column(name = "tota_price")
-    private int totalPrice;
+    private float totalPrice;
 
     @Column(name = "create_date")
     private String createDate;
@@ -18,6 +18,13 @@ public class OrderEntity {
     @JoinColumn(name = "id_user")
     private UserEntity user;
 
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
+    }
     public int getId() {
         return id;
     }
@@ -26,13 +33,6 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 
     public String getCreateDate() {
         return createDate;

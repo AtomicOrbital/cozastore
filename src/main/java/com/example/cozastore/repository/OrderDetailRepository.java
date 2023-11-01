@@ -1,4 +1,7 @@
 package com.example.cozastore.repository;
 
-public interface OrderDetailRepository {
+import com.example.cozastore.entity.OrderDetailEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrderDetailRepository extends JpaRepository<OrderDetailEntity, Integer> {
 }
