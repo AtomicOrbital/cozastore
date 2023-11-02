@@ -72,6 +72,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET,"/category").permitAll()
                 .antMatchers(HttpMethod.GET, "/product/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/orders/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/orders/**").permitAll()
                 .anyRequest().authenticated() // All other requests need authentication
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
