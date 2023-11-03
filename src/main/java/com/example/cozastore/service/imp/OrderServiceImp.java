@@ -9,4 +9,10 @@ public interface OrderServiceImp {
     List<OrderResponse> getAllOrders();
 
     boolean insertOrder(OrderRequest orderRequest);
+
+    OrderResponse getOrderById(int id);
+
+    boolean deleteOrderById(int id);
+
+    boolean modifyOrderById(int id, OrderRequest orderRequest);
 }
