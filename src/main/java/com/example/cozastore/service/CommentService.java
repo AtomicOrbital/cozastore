@@ -2,6 +2,7 @@ package com.example.cozastore.service;
 
 import com.example.cozastore.entity.BlogEntity;
 import com.example.cozastore.entity.CommentEntity;
+import com.example.cozastore.entity.OrderEntity;
 import com.example.cozastore.payload.request.CommentRequest;
 import com.example.cozastore.payload.response.CommentResponse;
 import com.example.cozastore.repository.CommentRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService implements CommentServiceImp {
@@ -60,16 +62,52 @@ public class CommentService implements CommentServiceImp {
 
     @Override
     public CommentResponse getCommentById(int id) {
-        return null;
+        CommentResponse response = new CommentResponse();
+        Optional<CommentEntity> optionalCommentEntity = commentRepository.findById(id);
+        if (optionalCommentEntity.isPresent()){
+            CommentEntity comment = optionalCommentEntity.get();
+            response.setId(comment.getId());
+            response.setName(comment.getName());
+            response.setContent(comment.getContent());
+            response.setEmail(comment.getEmail());
+            response.setWebsite(comment.getWebsite());
+            response.setIdBlog(comment.getBlog().getId());
+        } else {
+            logger.error("Can't find comment, please check your ID again.");
+        }
+        return response;
     }
 
     @Override
     public boolean deleteCommentById(int id) {
-        return false;
+        boolean isSuccess = false;
+        try {
+            commentRepository.deleteById(id);
+            isSuccess = true;
+        } catch (Exception e) {
+            logger.error("Can't delete comment " + e.getLocalizedMessage());
+        }
+        return isSuccess;
     }
 
     @Override
     public boolean modifyCommentById(int id, CommentRequest commentRequest) {
-        return false;
+        boolean isSuccess = false;
+        Optional<CommentEntity> optionalCommentEntity = commentRepository.findById(id);
+        if (optionalCommentEntity.isPresent()){
+            CommentEntity comment = optionalCommentEntity.get();
+            comment.setName(commentRequest.getName());
+            comment.setContent(commentRequest.getContent());
+            comment.setEmail(commentRequest.getEmail());
+            comment.setWebsite(commentRequest.getWebsite());
+            BlogEntity blog = new BlogEntity();
+            blog.setId(commentRequest.getIdBlog());
+            comment.setBlog(blog);
+            commentRepository.save(comment);
+            isSuccess = true;
+        } else {
+            logger.error("No comment entity found, please check your ID again.");
+        }
+        return isSuccess;
     }
 }
