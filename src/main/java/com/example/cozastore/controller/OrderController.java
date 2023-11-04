@@ -3,7 +3,6 @@ package com.example.cozastore.controller;
 import com.example.cozastore.payload.request.OrderRequest;
 import com.example.cozastore.payload.response.OrderResponse;
 import com.example.cozastore.service.imp.OrderServiceImp;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -6,7 +6,6 @@ import com.example.cozastore.payload.request.OrderRequest;
 import com.example.cozastore.payload.response.OrderResponse;
 import com.example.cozastore.repository.OrderRepository;
 import com.example.cozastore.service.imp.OrderServiceImp;
-import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

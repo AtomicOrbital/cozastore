@@ -75,6 +75,10 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/orders/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/orders/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/orders/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/comments/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/comments/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/comments/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/comments/**").permitAll()
                 .anyRequest().authenticated() // All other requests need authentication
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
