@@ -6,14 +6,11 @@ import com.example.cozastore.payload.request.BlogRequest;
 import com.example.cozastore.payload.response.BlogResponse;
 import com.example.cozastore.repository.BlogRepository;
 import com.example.cozastore.service.imp.BlogServiceImp;
-import org.apache.catalina.User;
-import org.hibernate.loader.collection.BasicCollectionJoinWalker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
