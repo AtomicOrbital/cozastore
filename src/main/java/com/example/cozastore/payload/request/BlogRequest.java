@@ -1,41 +1,12 @@
-package com.example.cozastore.entity;
+package com.example.cozastore.payload.request;
 
-import javax.persistence.*;
-import java.util.List;
-
-@Entity(name = "blog")
-public class BlogEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BlogRequest {
     private int id;
-
-    @Column(name = "title")
     private String title;
-
-    @Column(name = "content")
     private String content;
-
-    @Column(name = "image")
     private String image;
-
-    @Column(name = "create_date")
     private String createDate;
-
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    private UserEntity user;
-
-    @OneToMany(mappedBy = "blog")
-    private List<CommentEntity> comments;
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
+    private int idUser;
     private String tags;
 
     public int getId() {
@@ -78,11 +49,19 @@ public class BlogEntity {
         this.createDate = createDate;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

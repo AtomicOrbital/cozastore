@@ -2,7 +2,6 @@ package com.example.cozastore.service;
 
 import com.example.cozastore.entity.BlogEntity;
 import com.example.cozastore.entity.CommentEntity;
-import com.example.cozastore.entity.OrderEntity;
 import com.example.cozastore.payload.request.CommentRequest;
 import com.example.cozastore.payload.response.CommentResponse;
 import com.example.cozastore.repository.CommentRepository;
