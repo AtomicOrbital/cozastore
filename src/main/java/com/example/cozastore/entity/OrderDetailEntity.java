@@ -6,6 +6,7 @@ import javax.persistence.*;
 public class OrderDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_order")
     private int id;
 
     @Column(name = "price")

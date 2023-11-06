@@ -24,7 +24,7 @@ public class ProductDetailEntity {
     private ProductEntity product;
 
     @ManyToOne
-    @JoinColumn(name = "size_id")
+    @JoinColumn(name = "id_size")
     private SizeEntity idSize;
 
     @OneToMany(mappedBy = "productDetail")
