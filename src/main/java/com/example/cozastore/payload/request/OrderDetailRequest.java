@@ -7,6 +7,16 @@ public class OrderDetailRequest {
     private double price;
     private int quantity;
 
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    private String createDate;
+
     public int getId() {
         return id;
     }

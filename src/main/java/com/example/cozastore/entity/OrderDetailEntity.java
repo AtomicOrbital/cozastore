@@ -10,7 +10,7 @@ public class OrderDetailEntity {
     private int id;
 
     @Column(name = "price")
-    private int price;
+    private double price;
 
     @Column(name = "quantity")
     private int quantity;
@@ -34,11 +34,11 @@ public class OrderDetailEntity {
         this.id = id;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
