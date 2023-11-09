@@ -71,6 +71,13 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/product").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/category").permitAll()
                 .antMatchers(HttpMethod.GET, "/product/**").permitAll()
+                .antMatchers("/swagger-ui/**",
+                        "/api-docs/**",
+                        "/swagger-resources/**",
+                        "/webjars/**",
+                        "/configuration/**",
+                        "/swagger*/**",
+                        "/webjars/springfox-swagger-ui/**").permitAll()
                 .anyRequest().authenticated() // All other requests need authentication
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

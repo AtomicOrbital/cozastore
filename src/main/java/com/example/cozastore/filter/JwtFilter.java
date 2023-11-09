@@ -41,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 try {
                     // Giải mã token
                     String data = jwtHelper.validationToken(token);
-                    System.out.println("kiemtra " + data);
+//                    System.out.println("kiemtra " + data);
                     //parse chuỗi danh sách role thành chuỗi
                     Type listType = new TypeToken<ArrayList<SimpleGrantedAuthority>>() {}.getType();
                     List<SimpleGrantedAuthority> roles = gson.fromJson(data, listType);
@@ -55,7 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken("", "", roles);
                     SecurityContext context = SecurityContextHolder.getContext();
                     context.setAuthentication(tokenAuthen);
-                    System.out.println("Kiemtra123 " + context);
+//                    System.out.println("Kiemtra123 " + context);
                 } catch (Exception e) {
                     System.out.println("Lỗi giải mã token: " + e.getLocalizedMessage());
                 }
@@ -63,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
         }
-        System.out.println("Kiem tra" + authen);
+//        System.out.println("Kiem tra" + authen);
 
         filterChain.doFilter(request, response);
     }

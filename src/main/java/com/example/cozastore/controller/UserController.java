@@ -2,6 +2,8 @@ package com.example.cozastore.controller;
 
 import com.example.cozastore.payload.request.SignUpRequest;
 import com.example.cozastore.payload.response.BaseResponse;
+import com.example.cozastore.payload.response.SignInResponse;
+import com.example.cozastore.service.UserService;
 import com.example.cozastore.service.imp.UserServiceImp;
 import com.example.cozastore.utils.JwtHelper;
 import com.google.gson.Gson;
@@ -30,6 +32,7 @@ public class UserController {
     @Autowired
     private UserServiceImp userServiceImp;
 
+    @Autowired
     private Gson gson = new Gson();
 
     @PostMapping("/signin")
@@ -39,11 +42,17 @@ public class UserController {
 
         List<GrantedAuthority>  listRoles = (List<GrantedAuthority>) authentication.getAuthorities();
         String dataToken = gson.toJson(listRoles);
-
         String token = jwtHelper.generateToken(dataToken);
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setData(token);
 
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        String role = roles.isEmpty() ? null : roles.get(0);
+
+        BaseResponse baseResponse = new BaseResponse();
+        SignInResponse signInResponse = new SignInResponse(token, role);
+        baseResponse.setData(signInResponse);
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }
 

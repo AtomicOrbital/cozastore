@@ -25,7 +25,7 @@ public class CustomAuthenProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        System.out.println("Kiem tra dang nhap provider");
+//        System.out.println("Kiem tra dang nhap provider");
         // Lấy username và password
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();

@@ -1,7 +1,10 @@
 package com.example.cozastore.service;
 
 import com.example.cozastore.entity.CategoryEntity;
+import com.example.cozastore.entity.ColorEntity;
+import com.example.cozastore.payload.request.CategoryRequest;
 import com.example.cozastore.payload.response.CategoryResponse;
+import com.example.cozastore.payload.response.ColorResponse;
 import com.example.cozastore.repository.CategoryRepository;
 import com.example.cozastore.service.imp.CategoryServiceImp;
 import com.google.gson.Gson;
@@ -28,11 +31,17 @@ public class CategoryService implements CategoryServiceImp {
 
     private Gson gson = new Gson();
 
-//    @Cacheable("allCategory")
+    @Override
+    public CategoryResponse createCetegory(CategoryRequest categoryRequest) {
+        CategoryEntity categoryEntity= new CategoryEntity();
+        categoryEntity.setName(categoryRequest.getNameCategory());
+        CategoryEntity savedEntity = categoryRepository.save(categoryEntity);
+        return new CategoryResponse(savedEntity.getId(), savedEntity.getName());
+    }
+
+    //    @Cacheable("allCategory")
     @Override
     public List<CategoryResponse> getAllCategory() {
-
-
         List<CategoryResponse> listResponse = new ArrayList<>();
         if(redisTemplate.hasKey("listCategory")){
             logger.info("Kiem tra cache redis");
@@ -53,5 +62,26 @@ public class CategoryService implements CategoryServiceImp {
             redisTemplate.opsForValue().set("listCategory",dataJson);
         }
         return listResponse;
+    }
+
+    @Override
+    public CategoryResponse getCategoryById(int id) {
+        CategoryEntity categoryEntity =  categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        return new CategoryResponse(categoryEntity.getId(), categoryEntity.getName());
+    }
+
+    @Override
+    public CategoryResponse updateCategory(int id, CategoryRequest categoryRequest) {
+        CategoryEntity existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        existingCategory.setName(categoryRequest.getNameCategory());
+        CategoryEntity updatedEntity = categoryRepository.save(existingCategory);
+        return new CategoryResponse(updatedEntity.getId(), updatedEntity.getName());
+    }
+
+    @Override
+    public void deleteCategory(int id) {
+        categoryRepository.deleteById(id);
     }
 }

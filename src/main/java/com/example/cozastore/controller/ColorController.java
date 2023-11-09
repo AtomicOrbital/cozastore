@@ -1,12 +1,9 @@
 package com.example.cozastore.controller;
 
-import com.example.cozastore.payload.request.CategoryRequest;
 import com.example.cozastore.payload.request.ColorRequest;
 import com.example.cozastore.payload.response.BaseResponse;
-import com.example.cozastore.payload.response.CategoryResponse;
 import com.example.cozastore.payload.response.ColorResponse;
-import com.example.cozastore.service.CategoryService;
-import com.example.cozastore.service.imp.CategoryServiceImp;
+import com.example.cozastore.service.ColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +12,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
-public class CategoryController {
-
+@RequestMapping("/api/colors")
+public class ColorController {
     @Autowired
-    private CategoryServiceImp categoryServiceImp;
+    private ColorService colorServiceImp;
 
     @PostMapping
-    public ResponseEntity<BaseResponse> createCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<BaseResponse> createColor(@RequestBody ColorRequest colorRequest){
         BaseResponse baseResponse = new BaseResponse();
         try {
-            CategoryResponse categoryResponse = categoryServiceImp.createCetegory(categoryRequest);
-            baseResponse.setData(categoryResponse);
-            baseResponse.setMessage("Category created successfully");
+            ColorResponse colorResponse = colorServiceImp.createColor(colorRequest);
+            baseResponse.setData(colorResponse);
+            baseResponse.setMessage("Color created successfully");
             return ResponseEntity.ok(baseResponse);
         } catch(Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -36,21 +32,28 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> getCategory(){
-        List<CategoryResponse> list = categoryServiceImp.getAllCategory();
+    @GetMapping
+    public ResponseEntity<BaseResponse> getAllColors(){
         BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setData(list);
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+        try {
+            List<ColorResponse> colors = colorServiceImp.getAllColors();
+            baseResponse.setMessage("SUCCESS");
+            baseResponse.setData(colors);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse> getCategoryById(@PathVariable int id){
+    public ResponseEntity<BaseResponse> getColorById(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();
         try {
-            CategoryResponse categoryResponse = categoryServiceImp.getCategoryById(id);
+            ColorResponse colorResponse = colorServiceImp.getColorById(id);
             baseResponse.setMessage("SUCCESS");
-            baseResponse.setData(categoryResponse);
+            baseResponse.setData(colorResponse);
             return ResponseEntity.ok(baseResponse);
         }catch (Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -60,13 +63,13 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponse> updateCategory(@PathVariable int id, @RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<BaseResponse> updateColor(@PathVariable int id, @RequestBody ColorRequest colorRequest){
 
         BaseResponse baseResponse = new BaseResponse();
         try {
-            CategoryResponse updatedCategory = categoryServiceImp.updateCategory(id, categoryRequest);
-            baseResponse.setMessage("Category Updated Successfully");
-            baseResponse.setData(updatedCategory);
+            ColorResponse updatedColor = colorServiceImp.updateColor(id, colorRequest);
+            baseResponse.setMessage("Color Updated Successfully");
+            baseResponse.setData(updatedColor);
             return ResponseEntity.ok(baseResponse);
         }catch (Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -76,11 +79,11 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> deleteCategory(@PathVariable int id){
+    public ResponseEntity<BaseResponse> deleteColor(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();
         try {
-            categoryServiceImp.deleteCategory(id);
-            baseResponse.setMessage("Category Deleted Successfully");
+            colorServiceImp.deleteColor(id);
+            baseResponse.setMessage("Color Deleted Successfully");
             return ResponseEntity.ok(baseResponse);
         }catch (Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());

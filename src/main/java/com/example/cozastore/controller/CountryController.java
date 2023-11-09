@@ -1,12 +1,11 @@
 package com.example.cozastore.controller;
 
-import com.example.cozastore.payload.request.CategoryRequest;
 import com.example.cozastore.payload.request.ColorRequest;
+import com.example.cozastore.payload.request.CountryRequest;
 import com.example.cozastore.payload.response.BaseResponse;
-import com.example.cozastore.payload.response.CategoryResponse;
 import com.example.cozastore.payload.response.ColorResponse;
-import com.example.cozastore.service.CategoryService;
-import com.example.cozastore.service.imp.CategoryServiceImp;
+import com.example.cozastore.payload.response.CountryResponse;
+import com.example.cozastore.service.imp.CountryServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +14,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
-public class CategoryController {
-
+@RequestMapping("/api/country")
+public class CountryController {
     @Autowired
-    private CategoryServiceImp categoryServiceImp;
+    private CountryServiceImp countryServiceImp;
 
     @PostMapping
-    public ResponseEntity<BaseResponse> createCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<BaseResponse> createCountry(@RequestBody CountryRequest countryRequest){
         BaseResponse baseResponse = new BaseResponse();
         try {
-            CategoryResponse categoryResponse = categoryServiceImp.createCetegory(categoryRequest);
-            baseResponse.setData(categoryResponse);
-            baseResponse.setMessage("Category created successfully");
+            CountryResponse countryResponse = countryServiceImp.createCountry(countryRequest);
+            baseResponse.setData(countryResponse);
+            baseResponse.setMessage("Country created successfully");
             return ResponseEntity.ok(baseResponse);
         } catch(Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -36,21 +34,28 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> getCategory(){
-        List<CategoryResponse> list = categoryServiceImp.getAllCategory();
+    @GetMapping
+    public ResponseEntity<BaseResponse> getAllCountry(){
         BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setData(list);
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+        try {
+            List<CountryResponse> country = countryServiceImp.getAllCountry();
+            baseResponse.setMessage("SUCCESS");
+            baseResponse.setData(country);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse> getCategoryById(@PathVariable int id){
+    public ResponseEntity<BaseResponse> getCountryById(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();
         try {
-            CategoryResponse categoryResponse = categoryServiceImp.getCategoryById(id);
+            CountryResponse countryResponse = countryServiceImp.getCountryById(id);
             baseResponse.setMessage("SUCCESS");
-            baseResponse.setData(categoryResponse);
+            baseResponse.setData(countryResponse);
             return ResponseEntity.ok(baseResponse);
         }catch (Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -60,13 +65,13 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponse> updateCategory(@PathVariable int id, @RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<BaseResponse> updateCountry(@PathVariable int id, @RequestBody CountryRequest countryRequest){
 
         BaseResponse baseResponse = new BaseResponse();
         try {
-            CategoryResponse updatedCategory = categoryServiceImp.updateCategory(id, categoryRequest);
-            baseResponse.setMessage("Category Updated Successfully");
-            baseResponse.setData(updatedCategory);
+            CountryResponse updatedCountry = countryServiceImp.updateCountry(id, countryRequest);
+            baseResponse.setMessage("Color Updated Successfully");
+            baseResponse.setData(updatedCountry);
             return ResponseEntity.ok(baseResponse);
         }catch (Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -76,11 +81,11 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> deleteCategory(@PathVariable int id){
+    public ResponseEntity<BaseResponse> deleteCountry(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();
         try {
-            categoryServiceImp.deleteCategory(id);
-            baseResponse.setMessage("Category Deleted Successfully");
+            countryServiceImp.deleteCountry(id);
+            baseResponse.setMessage("Country Deleted Successfully");
             return ResponseEntity.ok(baseResponse);
         }catch (Exception e){
             baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
