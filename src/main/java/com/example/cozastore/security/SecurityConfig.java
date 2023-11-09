@@ -90,6 +90,10 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/order-details/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/order-details/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/order-details/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/product-details/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/product-details/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/product-details/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/product-details/**").permitAll()
                 .anyRequest().authenticated() // All other requests need authentication
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

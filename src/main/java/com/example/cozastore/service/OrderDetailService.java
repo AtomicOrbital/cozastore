@@ -88,7 +88,7 @@ public class OrderDetailService implements OrderDetailServiceImp {
             orderDetailRepository.deleteById(id);
             isSuccess = true;
         } catch (Exception e){
-            logger.info("Unable to delete order details from ID.");
+            logger.info("Unable to delete order details from ID. " +e.getLocalizedMessage());
         }
         return isSuccess;
     }
