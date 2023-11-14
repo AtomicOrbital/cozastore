@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -70,7 +72,6 @@ public class SecurityConfig {
                 .antMatchers("/user/**").permitAll() // Allow without authentication
                 .antMatchers(HttpMethod.POST, "/product").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/category").permitAll()
-                .antMatchers(HttpMethod.GET, "/product/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/product/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/product/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/product/**").permitAll()
@@ -94,7 +95,16 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/product-details/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/product-details/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/product-details/**").permitAll()
-                .anyRequest().authenticated() // All other requests need authentication
+          
+                .antMatchers("/swagger-ui/**",
+                        "/api-docs/**",
+                        "/swagger-resources/**",
+                        "/webjars/**",
+                        "/configuration/**",
+                        "/swagger*/**",
+         "/webjars/springfox-swagger-ui/**").permitAll()
+
+                .anyRequest().authenticated() 
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

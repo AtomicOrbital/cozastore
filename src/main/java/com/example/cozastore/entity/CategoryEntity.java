@@ -15,7 +15,6 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "idCategory")
     private List<ProductEntity> products;
 
-
     public List<ProductEntity> getProducts() {
         return products;
     }

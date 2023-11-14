@@ -1,10 +1,9 @@
 package com.example.cozastore.repository;
 
-import com.example.cozastore.entity.CategoryEntity;
+import com.example.cozastore.entity.CountryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer> {
-
+public interface CountryRepository extends JpaRepository<CountryEntity,Integer> {
 }
