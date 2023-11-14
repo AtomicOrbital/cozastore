@@ -54,7 +54,7 @@ public class CommentService implements CommentServiceImp {
             commentRepository.save(commentEntity);
             isSuccess = true;
         } catch (Exception e) {
-            logger.error("Unable to insert comment. Error: " + e.getLocalizedMessage());
+            logger.info("Unable to insert comment. Error: " + e.getLocalizedMessage());
         }
         return isSuccess;
     }
@@ -72,7 +72,7 @@ public class CommentService implements CommentServiceImp {
             response.setWebsite(comment.getWebsite());
             response.setIdBlog(comment.getBlog().getId());
         } else {
-            logger.error("Can't find comment, please check your ID again.");
+            logger.info("Can't find comment, please check your ID again.");
         }
         return response;
     }
@@ -84,7 +84,7 @@ public class CommentService implements CommentServiceImp {
             commentRepository.deleteById(id);
             isSuccess = true;
         } catch (Exception e) {
-            logger.error("Can't delete comment " + e.getLocalizedMessage());
+            logger.info("Can't delete comment " + e.getLocalizedMessage());
         }
         return isSuccess;
     }
@@ -105,7 +105,7 @@ public class CommentService implements CommentServiceImp {
             commentRepository.save(comment);
             isSuccess = true;
         } else {
-            logger.error("No comment entity found, please check your ID again.");
+            logger.info("No comment entity found, please check your ID again.");
         }
         return isSuccess;
     }

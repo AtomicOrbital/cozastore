@@ -74,7 +74,7 @@ public class ProductService implements ProductServiceImp {
             response.setTags(product.getTags());
             response.setIdCategory(product.getIdCategory().getId());
         } else {
-            logger.error("Can't find product from ID, please check your ID.");
+            logger.info("Can't find product from ID, please check your ID.");
         }
         return response;
     }

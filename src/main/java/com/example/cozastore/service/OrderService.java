@@ -68,7 +68,7 @@ public class OrderService implements OrderServiceImp {
             response.setCreateDate(order.getCreateDate());
             response.setIdUser(order.getUser().getId());
         } else {
-            logger.error("No entity found, please check your ID again.");
+            logger.info("No entity found, please check your ID again.");
         }
         return response;
     }
@@ -80,8 +80,8 @@ public class OrderService implements OrderServiceImp {
             orderRepository.deleteById(id);
             isSuccess = true;
         } catch (EmptyResultDataAccessException e) {
-            logger.error("Entity with ID " + id + " not found");
-            logger.error("Data Access Error " + e.getLocalizedMessage());
+            logger.info("Entity with ID " + id + " not found");
+            logger.info("Data Access Error " + e.getLocalizedMessage());
         }
         return isSuccess;
     }
@@ -100,7 +100,7 @@ public class OrderService implements OrderServiceImp {
             orderRepository.save(order);
             isSuccess = true;
         } else {
-            logger.error("No entity found, please check your ID again.");
+            logger.info("No entity found, please check your ID again.");
         }
         return isSuccess;
     }

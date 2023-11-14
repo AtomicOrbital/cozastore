@@ -56,7 +56,7 @@ public class BlogService implements BlogServiceImp {
             blogRepository.save(blog);
             isSuccess = true;
         } catch (Exception e) {
-            logger.error("Unable to insert blog. Error: " + e.getLocalizedMessage());
+            logger.info("Unable to insert blog. Error: " + e.getLocalizedMessage());
         }
         return isSuccess;
     }
@@ -75,7 +75,7 @@ public class BlogService implements BlogServiceImp {
             response.setTags(blog.getTags());
             response.setIdUser(blog.getUser().getId());
         } else {
-            logger.error("Can't find blog from Id. Please check your ID again.");
+            logger.info("Can't find blog from Id. Please check your ID again.");
         }
         return response;
     }
@@ -87,7 +87,7 @@ public class BlogService implements BlogServiceImp {
             blogRepository.deleteById(id);
             isSuccess = true;
         } catch (Exception e) {
-            logger.error("Unable to delete blog from ID. Please check your Id again.");
+            logger.info("Unable to delete blog from ID. Please check your Id again.");
         }
         return isSuccess;
     }
@@ -109,7 +109,7 @@ public class BlogService implements BlogServiceImp {
             blogRepository.save(blog);
             isSuccess = true;
         } else {
-            logger.error("Can't find blog from ID. Please check your ID again.");
+            logger.info("Can't find blog from ID. Please check your ID again.");
         }
         return isSuccess;
     }
