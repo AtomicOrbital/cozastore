@@ -7,6 +7,7 @@ import com.example.cozastore.service.ColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ColorController {
     @Autowired
     private ColorService colorServiceImp;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse> createColor(@RequestBody ColorRequest colorRequest){
         BaseResponse baseResponse = new BaseResponse();
@@ -62,6 +64,7 @@ public class ColorController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse> updateColor(@PathVariable int id, @RequestBody ColorRequest colorRequest){
 
@@ -78,6 +81,7 @@ public class ColorController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteColor(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();

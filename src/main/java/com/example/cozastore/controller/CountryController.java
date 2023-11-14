@@ -9,6 +9,7 @@ import com.example.cozastore.service.imp.CountryServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class CountryController {
     @Autowired
     private CountryServiceImp countryServiceImp;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse> createCountry(@RequestBody CountryRequest countryRequest){
         BaseResponse baseResponse = new BaseResponse();
@@ -64,6 +66,7 @@ public class CountryController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse> updateCountry(@PathVariable int id, @RequestBody CountryRequest countryRequest){
 
@@ -80,6 +83,7 @@ public class CountryController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteCountry(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();

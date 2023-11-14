@@ -1,8 +1,11 @@
 package com.example.cozastore.controller;
 
+import com.example.cozastore.entity.UserEntity;
 import com.example.cozastore.payload.request.SignUpRequest;
+import com.example.cozastore.payload.request.UserRequest;
 import com.example.cozastore.payload.response.BaseResponse;
 import com.example.cozastore.payload.response.SignInResponse;
+import com.example.cozastore.payload.response.UserResponse;
 import com.example.cozastore.service.UserService;
 import com.example.cozastore.service.imp.UserServiceImp;
 import com.example.cozastore.utils.JwtHelper;
@@ -10,6 +13,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -67,5 +71,70 @@ public class UserController {
         HttpStatus status = isSuccess ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return new ResponseEntity<>(baseResponse, status);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping
+    public ResponseEntity<BaseResponse> getAllUsers(){
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            List<UserResponse> users = userServiceImp.getAllUsers();
+            baseResponse.setMessage("SUCCESS");
+            baseResponse.setData(users);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse> getUserById(@PathVariable int id){
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            UserResponse userResponse = userServiceImp.getUserById(id);
+            baseResponse.setMessage("SUCCESS");
+            baseResponse.setData(userResponse);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponse> updateUser(@PathVariable int id, @RequestBody UserRequest userRequest){
+        BaseResponse baseResponse = new BaseResponse();
+
+        try {
+            UserResponse updatedUser = userServiceImp.updateUser(id, userRequest);
+            baseResponse.setMessage("Updated User Successfully");
+            baseResponse.setData(updatedUser);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponse> deleteUser(@PathVariable int id){
+        BaseResponse baseResponse = new BaseResponse();
+
+        try {
+            userServiceImp.deleteUser(id);
+            baseResponse.setMessage("Deleted User Successfully");
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 }

@@ -9,6 +9,7 @@ import com.example.cozastore.service.imp.SizeServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class SizeController {
     @Autowired
     private SizeServiceImp sizeServiceImp;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<BaseResponse> createSize(@RequestBody SizeRequest sizeRequest){
         BaseResponse baseResponse = new BaseResponse();
@@ -64,6 +66,7 @@ public class SizeController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse> updateColor(@PathVariable int id, @RequestBody SizeRequest sizeRequest){
 
@@ -80,6 +83,7 @@ public class SizeController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteColor(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();

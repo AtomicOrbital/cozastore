@@ -51,7 +51,8 @@ public class CountryService implements CountryServiceImp {
             logger.info("Kiem tra cache listCountry");
             String dataRedis = redisTemplate.opsForValue().get("listCountry").toString();
             logger.info("Fetched from Redis: " + dataRedis);
-            Type listType = new TypeToken<ArrayList<SizeResponse>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<CountryResponse>>(){}.getType();
+            countryResponses = gson.fromJson(dataRedis, listType);
         } else {
             List<CountryEntity> countryEntities = countryRepository.findAll();
 
