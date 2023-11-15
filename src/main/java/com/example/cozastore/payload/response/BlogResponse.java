@@ -45,11 +45,11 @@ public class BlogResponse {
         this.createDate = createDate;
     }
 
-    public int getIdUser() {
+    public Integer getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(int idUser) {
+    public void setIdUser(Integer idUser) {
         this.idUser = idUser;
     }
 
@@ -63,6 +63,6 @@ public class BlogResponse {
 
     private String image;
     private String createDate;
-    private int idUser;
+    private Integer idUser;
     private String tags;
 }

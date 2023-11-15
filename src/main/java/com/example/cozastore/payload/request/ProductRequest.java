@@ -1,20 +1,11 @@
 package com.example.cozastore.payload.request;
 
 public class ProductRequest {
-    private int id;
     private String images;
     private String title;
     private float price;
     private int idCategory;
     private String tags;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getImages() {
         return images;

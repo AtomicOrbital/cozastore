@@ -1,6 +1,7 @@
 package com.example.cozastore.controller;
 
 import com.example.cozastore.payload.request.ProductRequest;
+import com.example.cozastore.payload.response.BaseResponse;
 import com.example.cozastore.payload.response.ProductResponse;
 import com.example.cozastore.service.ProductService;
 import com.example.cozastore.service.imp.FileStorageServiceImp;
@@ -10,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,18 +26,38 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<?> getProduct(){
-        List<ProductResponse> responseList = productServiceImp.getAllProducts();
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+        BaseResponse response = new BaseResponse();
+        try {
+            List<ProductResponse> responseList = productServiceImp.getAllProducts();
+            response.setMessage("SUCCESS");
+            response.setData(responseList);
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            response.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<?> insertProduct(@RequestParam MultipartFile file,
                                            @RequestParam String title,
                                            @RequestParam double price,
-                                           @RequestParam int idCategory
+                                           @RequestParam int idCategory,
+                                           @RequestParam String tags
     ){
-        productServiceImp.insertProduct(file,title, price, idCategory);
-        return new ResponseEntity<>("Insert Product",HttpStatus.CREATED);
+        BaseResponse response = new BaseResponse();
+        try {
+            boolean isSuccess = productServiceImp.insertProduct(file,title, price, idCategory,tags);
+            response.setMessage("Product Created Successfully");
+            response.setData(isSuccess);
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            response.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     @GetMapping("download/{tenFile}")
@@ -47,19 +69,48 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductFromId(@PathVariable int id){
-        ProductResponse response = productServiceImp.getProductById(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            ProductResponse response = productServiceImp.getProductById(id);
+            baseResponse.setMessage("SUCCESS");
+            baseResponse.setData(response);
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProductFromId(@PathVariable int id){
-        boolean isSuccess = productServiceImp.deleteProductById(id);
-        return new ResponseEntity<>(isSuccess, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            boolean isSuccess = productServiceImp.deleteProductById(id);
+            baseResponse.setMessage("Deleted Product Successfully");
+            baseResponse.setData(isSuccess);
+            return ResponseEntity.ok(isSuccess);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> modifyProductFromId(@PathVariable int id, @RequestBody ProductRequest productRequest){
-        boolean isSuccess = productServiceImp.modifyProductById(id, productRequest);
-        return new ResponseEntity<>(isSuccess, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            boolean isSuccess = productServiceImp.modifyProductById(id, productRequest);
+            baseResponse.setMessage("Updated Product Successfully");
+            baseResponse.setData(isSuccess);
+            return ResponseEntity.ok(isSuccess);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 }

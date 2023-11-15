@@ -46,12 +46,40 @@ public class ProductService implements ProductServiceImp {
     }
 
     @Override
-    public boolean insertProduct(MultipartFile file,String title, double price, int idCategory) {
+    public boolean insertProduct(MultipartFile file,
+                                 String title,
+                                 double price,
+                                 int idCategory,
+                                 String tags
+                                 ) {
         boolean isSave =  fileStorageService.saveFile(file);
         if(isSave){
-            // Khi save hình thành công thêm dữ liệu vào bảng Product và ProductDetail
-            // Khi save dữ liệu database thành công thì thuộc tính id của Entity se có giá trị
-            // Transaction
+            try {
+                // Khi save hình thành công thêm dữ liệu vào bảng Product và ProductDetail
+                // Khi save dữ liệu database thành công thì thuộc tính id của Entity se có giá trị
+                // Transaction
+                ProductEntity product = new ProductEntity();
+                product.setTitle(title);
+                product.setPrice(price);
+
+                // Lưu chỉ tên
+                String fileName = file.getOriginalFilename();
+                product.setImages(fileName);
+
+                //Đặt Tags hoặc bỏ qua nếu không cần thiết
+                product.setTags(tags);
+
+                // Tạo và đặt CategoryEntity
+                CategoryEntity category = new CategoryEntity();
+                category.setId(idCategory);
+                product.setIdCategory(category);
+
+                productRepository.save(product);
+                return true;
+            }catch (Exception e){
+                logger.error("Error when inserting product: " + e.getMessage());
+                return false;
+            }
         }
         return false;
     }

@@ -1,12 +1,14 @@
 package com.example.cozastore.controller;
 
 import com.example.cozastore.payload.request.OrderDetailRequest;
+import com.example.cozastore.payload.response.BaseResponse;
 import com.example.cozastore.payload.response.OrderDetailResponse;
 import com.example.cozastore.service.OrderDetailService;
 import com.example.cozastore.service.imp.OrderDetailServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,31 +21,79 @@ public class OrderDetailController {
 
     @GetMapping("")
     public ResponseEntity<?> getOrderDetails(){
-        List<OrderDetailResponse> responseList = orderDetailServiceImp.getAllOrderDetails();
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            List<OrderDetailResponse> responseList = orderDetailServiceImp.getAllOrderDetails();
+            baseResponse.setMessage("SUCCESS");
+            baseResponse.setData(responseList);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<?> insertOrderDetail(@RequestBody OrderDetailRequest orderDetailRequest){
-        boolean isSuccess = orderDetailServiceImp.insertOrderDetail(orderDetailRequest);
-        return new ResponseEntity<>(isSuccess, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            boolean isSuccess = orderDetailServiceImp.insertOrderDetail(orderDetailRequest);
+            baseResponse.setMessage("Created OrderDetail Successfully");
+            baseResponse.setData(isSuccess);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderDetailFromId(@PathVariable int id){
-        OrderDetailResponse response = orderDetailServiceImp.getOrderDetailById(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            OrderDetailResponse response = orderDetailServiceImp.getOrderDetailById(id);
+            baseResponse.setMessage("SUCCESS");
+            baseResponse.setData(response);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrderDetailFromId(@PathVariable int id){
-        boolean isSuccess = orderDetailServiceImp.deleteOrderDetailById(id);
-        return new ResponseEntity<>(isSuccess, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            boolean isSuccess = orderDetailServiceImp.deleteOrderDetailById(id);
+            baseResponse.setMessage("Deleted OrderDetails Successfully");
+            baseResponse.setData(isSuccess);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> modifyOrderDetailFromId(@PathVariable int id, @RequestBody OrderDetailRequest orderDetailRequest){
-        boolean isSuccess = orderDetailServiceImp.modifyOrderDetailById(id, orderDetailRequest);
-        return new ResponseEntity<>(isSuccess, HttpStatus.OK);
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+            boolean isSuccess = orderDetailServiceImp.modifyOrderDetailById(id, orderDetailRequest);
+            baseResponse.setMessage("Updated OrderDetails Successfully");
+            baseResponse.setData(isSuccess);
+            return ResponseEntity.ok(baseResponse);
+        }catch (Exception e){
+            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            baseResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(baseResponse);
+        }
     }
 }

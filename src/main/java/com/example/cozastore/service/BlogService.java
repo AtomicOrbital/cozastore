@@ -34,7 +34,12 @@ public class BlogService implements BlogServiceImp {
             response.setImage(entity.getImage());
             response.setCreateDate(entity.getCreateDate());
             response.setTags(entity.getTags());
-            response.setIdUser(entity.getUser().getId());
+            if(entity.getUser() != null ){
+                response.setIdUser(entity.getUser().getId());
+            } else {
+                response.setIdUser(null);
+            }
+
             responseList.add(response);
         }
         return responseList;
@@ -73,7 +78,9 @@ public class BlogService implements BlogServiceImp {
             response.setImage(blog.getImage());
             response.setCreateDate(blog.getCreateDate());
             response.setTags(blog.getTags());
-            response.setIdUser(blog.getUser().getId());
+            if(response.getIdUser() != null) {
+                response.setIdUser(blog.getUser().getId());
+            }
         } else {
             logger.info("Can't find blog from Id. Please check your ID again.");
         }

@@ -8,7 +8,7 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "tota_price")
+    @Column(name = "total_price")
     private float totalPrice;
 
     @Column(name = "create_date")

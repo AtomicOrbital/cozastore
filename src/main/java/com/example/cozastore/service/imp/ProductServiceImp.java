@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProductServiceImp {
     List<ProductResponse> getAllProducts();
-    boolean insertProduct(MultipartFile file,String title,double price, int idCategory);
+    boolean insertProduct(MultipartFile file,String title,double price, int idCategory, String tags);
 
     Resource downloadProductFile(String tenFile);
 
