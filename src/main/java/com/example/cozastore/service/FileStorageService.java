@@ -1,13 +1,13 @@
 package com.example.cozastore.service;
 
 import com.example.cozastore.service.imp.FileStorageServiceImp;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +20,8 @@ public class FileStorageService implements FileStorageServiceImp {
     private String folderPath;
 
     private Path root;
+
+    private final Tika tika = new Tika();
 
     @Override
     public boolean saveFile(MultipartFile file) {
@@ -53,4 +55,17 @@ public class FileStorageService implements FileStorageServiceImp {
         return null;
     }
 
+    public String getContentType(Path path){
+        try {
+            return tika.detect(path);
+        }catch(Exception e){
+            return "application/octet-stream";
+        }
+    }
+
+    // Trả về đường dẫn cho filename
+    public Path getFilePath(String fileName) {
+        root = Paths.get(folderPath).normalize().toAbsolutePath();
+        return root.resolve(fileName).normalize();
+    }
 }

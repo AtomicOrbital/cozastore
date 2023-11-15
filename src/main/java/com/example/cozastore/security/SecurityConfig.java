@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").permitAll() // Allow without authentication
+                .antMatchers(HttpMethod.GET,"/api/images/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/category").permitAll()
                 .antMatchers(HttpMethod.GET, "/product/**").permitAll()
 //                .antMatchers(HttpMethod.POST, "/product/**").permitAll()
