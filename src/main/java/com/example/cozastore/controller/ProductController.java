@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -39,7 +40,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<?> insertProduct(@RequestParam MultipartFile file,
                                            @RequestParam String title,

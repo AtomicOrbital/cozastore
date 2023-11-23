@@ -1,6 +1,8 @@
 package com.example.cozastore.service;
 
 import com.example.cozastore.entity.BlogEntity;
+import com.example.cozastore.entity.CategoryEntity;
+import com.example.cozastore.entity.ProductEntity;
 import com.example.cozastore.entity.UserEntity;
 import com.example.cozastore.payload.request.BlogRequest;
 import com.example.cozastore.payload.response.BlogResponse;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,9 @@ import java.util.Optional;
 
 @Service
 public class BlogService implements BlogServiceImp {
+    @Autowired
+    private FileStorageService fileStorageService;
+
     @Autowired
     private BlogRepository blogRepository;
 
@@ -64,6 +70,32 @@ public class BlogService implements BlogServiceImp {
             logger.info("Unable to insert blog. Error: " + e.getLocalizedMessage());
         }
         return isSuccess;
+    }
+
+    @Override
+    public boolean insertBlog(String title, String content, MultipartFile file, String createDate, int idUser, String tags) {
+        boolean isSave =  fileStorageService.saveFile(file);
+        if(isSave){
+            try {
+                BlogEntity blog = new BlogEntity();
+                blog.setTitle(title);
+                blog.setContent(content);
+                String fileName = file.getOriginalFilename();
+                blog.setImage(fileName);
+                blog.setCreateDate(createDate);
+                blog.setTags(tags);
+                UserEntity user = new UserEntity();
+                user.setId(idUser);
+                blog.setUser(user);
+
+                blogRepository.save(blog);
+                return true;
+            }catch (Exception e){
+                logger.error("Error when inserting product: " + e.getMessage());
+                return false;
+            }
+        }
+        return false;
     }
 
     @Override

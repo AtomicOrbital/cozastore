@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/blogs")
 public class BlogController {
@@ -33,19 +35,38 @@ public class BlogController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
-    public ResponseEntity<?> insertBlog(@RequestBody BlogRequest blogRequest){
-        BaseResponse baseResponse = new BaseResponse();
+//    public ResponseEntity<?> insertBlog(@RequestBody BlogRequest blogRequest){
+//        BaseResponse baseResponse = new BaseResponse();
+//        try {
+//            boolean isSuccess = blogServiceImp.insertBlog(blogRequest);
+//            baseResponse.setMessage("Created Blog Successfully");
+//            baseResponse.setData(isSuccess);
+//            return ResponseEntity.ok(baseResponse);
+//        }catch (Exception e){
+//            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+//            baseResponse.setMessage(e.getMessage());
+//            return ResponseEntity.badRequest().body(baseResponse);
+//        }
+//    }
+    public ResponseEntity<?> insertBlog(@RequestParam String title,
+                                        @RequestParam String content,
+                                        @RequestParam MultipartFile file,
+                                        @RequestParam String createDate,
+                                        @RequestParam int idUser,
+                                        @RequestParam String tags
+    ){
+        BaseResponse response = new BaseResponse();
         try {
-            boolean isSuccess = blogServiceImp.insertBlog(blogRequest);
-            baseResponse.setMessage("Created Blog Successfully");
-            baseResponse.setData(isSuccess);
-            return ResponseEntity.ok(baseResponse);
+            boolean isSuccess = blogServiceImp.insertBlog(title, content, file, createDate, idUser, tags);
+            response.setMessage("Blog Created Successfully");
+            response.setData(isSuccess);
+            return ResponseEntity.ok(response);
         }catch (Exception e){
-            baseResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            baseResponse.setMessage(e.getMessage());
-            return ResponseEntity.badRequest().body(baseResponse);
+            response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            response.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(response);
         }
     }
 
