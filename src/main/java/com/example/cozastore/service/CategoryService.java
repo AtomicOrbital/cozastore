@@ -1,8 +1,10 @@
 package com.example.cozastore.service;
 
+import com.example.cozastore.entity.BlogEntity;
 import com.example.cozastore.entity.CategoryEntity;
 import com.example.cozastore.entity.ColorEntity;
 import com.example.cozastore.payload.request.CategoryRequest;
+import com.example.cozastore.payload.response.BlogResponse;
 import com.example.cozastore.payload.response.CategoryResponse;
 import com.example.cozastore.payload.response.ColorResponse;
 import com.example.cozastore.repository.CategoryRepository;
@@ -42,26 +44,35 @@ public class CategoryService implements CategoryServiceImp {
     //    @Cacheable("allCategory")
     @Override
     public List<CategoryResponse> getAllCategory() {
-        List<CategoryResponse> listResponse = new ArrayList<>();
-        if(redisTemplate.hasKey("listCategory")){
-            logger.info("Kiem tra cache redis");
-            String dataRedis = redisTemplate.opsForValue().get("listCategory").toString();
-            Type listType = new TypeToken<ArrayList<CategoryResponse>>(){}.getType();
-            listResponse = gson.fromJson(dataRedis, listType);
-        } else {
-            logger.info("Kiem tra category database no cache");
-            List<CategoryEntity> list = categoryRepository.findAll();
-            for(CategoryEntity item: list){
-                CategoryResponse categoryResponse = new CategoryResponse();
-                categoryResponse.setId(item.getId());
-                categoryResponse.setName(item.getName());
-
-                listResponse.add(categoryResponse);
-            }
-            String dataJson = gson.toJson(listResponse);
-            redisTemplate.opsForValue().set("listCategory",dataJson);
+//        List<CategoryResponse> listResponse = new ArrayList<>();
+//        if(redisTemplate.hasKey("listCategory")){
+//            logger.info("Kiem tra cache redis");
+//            String dataRedis = redisTemplate.opsForValue().get("listCategory").toString();
+//            Type listType = new TypeToken<ArrayList<CategoryResponse>>(){}.getType();
+//            listResponse = gson.fromJson(dataRedis, listType);
+//        } else {
+//            logger.info("Kiem tra category database no cache");
+//            List<CategoryEntity> list = categoryRepository.findAll();
+//            for(CategoryEntity item: list){
+//                CategoryResponse categoryResponse = new CategoryResponse();
+//                categoryResponse.setId(item.getId());
+//                categoryResponse.setName(item.getName());
+//
+//                listResponse.add(categoryResponse);
+//            }
+//            String dataJson = gson.toJson(listResponse);
+//            redisTemplate.opsForValue().set("listCategory",dataJson);
+//        }
+//        return listResponse;
+        List<CategoryResponse> responseList = new ArrayList<>();
+        List<CategoryEntity> entityList = categoryRepository.findAll();
+        for (CategoryEntity entity: entityList) {
+            CategoryResponse response = new CategoryResponse();
+            response.setId(entity.getId());
+            response.setName(entity.getName());
+            responseList.add(response);
         }
-        return listResponse;
+        return responseList;
     }
 
     @Override

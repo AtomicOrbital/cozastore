@@ -21,6 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -62,10 +65,22 @@ public class SecurityConfig {
                 .build();
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("http://127.0.0.1:5500"); // Add the origin of your frontend application
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable() // disable CSRF as using API
+        return httpSecurity
+                .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable() // disable CSRF as using API
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // không sử dụng session
                 .and()
                 .authorizeRequests()
@@ -81,7 +96,7 @@ public class SecurityConfig {
 //                .antMatchers(HttpMethod.DELETE, "/orders/**").permitAll()
 //                .antMatchers(HttpMethod.PUT, "/orders/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/comments/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/comments/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/comments/**").permitAll()
 //                .antMatchers(HttpMethod.DELETE, "/comments/**").permitAll()
 //                .antMatchers(HttpMethod.PUT, "/comments/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/blogs/**").permitAll()
@@ -96,7 +111,8 @@ public class SecurityConfig {
 //                .antMatchers(HttpMethod.POST, "/product-details/**").permitAll()
 //                .antMatchers(HttpMethod.DELETE, "/product-details/**").permitAll()
 //                .antMatchers(HttpMethod.PUT, "/product-details/**").permitAll()
-          
+                .antMatchers(HttpMethod.GET,"/category/**").permitAll()
+
                 .antMatchers("/swagger-ui/**",
                         "/api-docs/**",
                         "/swagger-resources/**",

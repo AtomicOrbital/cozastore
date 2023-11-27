@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
@@ -33,7 +34,7 @@ public class CommentController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<?> insertComment(@RequestBody  CommentRequest commentRequest){
         BaseResponse baseResponse = new BaseResponse();

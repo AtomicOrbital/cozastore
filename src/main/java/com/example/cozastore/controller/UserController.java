@@ -89,7 +89,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse> getUserById(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();

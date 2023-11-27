@@ -110,9 +110,10 @@ public class BlogService implements BlogServiceImp {
             response.setImage(blog.getImage());
             response.setCreateDate(blog.getCreateDate());
             response.setTags(blog.getTags());
-            if(response.getIdUser() != null) {
-                response.setIdUser(blog.getUser().getId());
-            }
+//            if(response.getIdUser() != null) {
+//                response.setIdUser(blog.getUser().getId());
+//            }
+            response.setIdUser(blog.getUser().getId());
         } else {
             logger.info("Can't find blog from Id. Please check your ID again.");
         }
