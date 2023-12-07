@@ -45,7 +45,7 @@ public class BlogResponse {
         this.createDate = createDate;
     }
 
-    public Integer getIdUser() {
+    public Integer  getIdUser() {
         return idUser;
     }
 
