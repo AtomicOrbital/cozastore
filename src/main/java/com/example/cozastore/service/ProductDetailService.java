@@ -29,9 +29,9 @@ public class ProductDetailService implements ProductDetailServiceImp {
         for (ProductDetailEntity entity: entityList) {
             ProductDetailResponse response = new ProductDetailResponse();
             response.setId(entity.getIdProductDetail());
-            response.setIdColor(entity.getColor().getId());
-            response.setIdProduct(entity.getProduct().getId());
-            response.setIdSize(entity.getIdSize().getId());
+            response.setNameColor(entity.getColor().getName());
+            response.setNameProduct(entity.getProduct().getTitle());
+            response.setNameSize(entity.getIdSize().getName());
             response.setQuantity(entity.getQuantity());
             response.setDescription(entity.getDesc());
             responseList.add(response);
@@ -74,9 +74,9 @@ public class ProductDetailService implements ProductDetailServiceImp {
         if (optionalProductDetailEntity.isPresent()){
             ProductDetailEntity productDetail = optionalProductDetailEntity.get();
             response.setId(productDetail.getIdProductDetail());
-            response.setIdProduct(productDetail.getProduct().getId());
-            response.setIdColor(productDetail.getColor().getId());
-            response.setIdSize(productDetail.getIdSize().getId());
+            response.setNameProduct(productDetail.getProduct().getTitle());
+            response.setNameColor(productDetail.getColor().getName());
+            response.setNameSize(productDetail.getIdSize().getName());
             response.setQuantity(productDetail.getQuantity());
             response.setDescription(productDetail.getDesc());
         } else {

@@ -7,6 +7,7 @@ import com.example.cozastore.payload.response.SizeResponse;
 import com.example.cozastore.payload.response.TagResponse;
 import com.example.cozastore.service.imp.TagServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,6 +68,7 @@ public class TagController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CacheEvict(value = "listTag", allEntries = true)
     @PutMapping("/{id}")
     public ResponseEntity<BaseResponse> updateTag(@PathVariable int id, @RequestBody TagRequest tagRequest){
 
@@ -84,6 +86,7 @@ public class TagController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @CacheEvict(value = "listTag", allEntries = true)
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse> deleteTag(@PathVariable int id){
         BaseResponse baseResponse = new BaseResponse();

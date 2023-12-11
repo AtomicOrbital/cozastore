@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class CategoryService implements CategoryServiceImp {
     private Gson gson = new Gson();
 
     @Override
+    @CacheEvict(value = "listCategory", allEntries = true)
     public CategoryResponse createCetegory(CategoryRequest categoryRequest) {
         CategoryEntity categoryEntity= new CategoryEntity();
         categoryEntity.setName(categoryRequest.getNameCategory());
@@ -39,28 +41,31 @@ public class CategoryService implements CategoryServiceImp {
         return new CategoryResponse(savedEntity.getId(), savedEntity.getName());
     }
 
-    //    @Cacheable("allCategory")
+
     @Override
+    @Cacheable(value = "listCategory")
     public List<CategoryResponse> getAllCategory() {
         List<CategoryResponse> listResponse = new ArrayList<>();
-        if(redisTemplate.hasKey("listCategory")){
-            logger.info("Kiem tra cache redis");
-            String dataRedis = redisTemplate.opsForValue().get("listCategory").toString();
-            Type listType = new TypeToken<ArrayList<CategoryResponse>>(){}.getType();
-            listResponse = gson.fromJson(dataRedis, listType);
-        } else {
-            logger.info("Kiem tra category database no cache");
-            List<CategoryEntity> list = categoryRepository.findAll();
-            for(CategoryEntity item: list){
-                CategoryResponse categoryResponse = new CategoryResponse();
-                categoryResponse.setId(item.getId());
-                categoryResponse.setName(item.getName());
 
-                listResponse.add(categoryResponse);
-            }
-            String dataJson = gson.toJson(listResponse);
-            redisTemplate.opsForValue().set("listCategory",dataJson);
+        List<CategoryEntity> list = categoryRepository.findAll();
+        for(CategoryEntity item: list){
+            CategoryResponse categoryResponse = new CategoryResponse();
+            categoryResponse.setId(item.getId());
+            categoryResponse.setName(item.getName());
+
+            listResponse.add(categoryResponse);
         }
+//        if(redisTemplate.hasKey("listCategory")){
+//            logger.info("Kiem tra cache redis");
+//            String dataRedis = redisTemplate.opsForValue().get("listCategory").toString();
+//            Type listType = new TypeToken<ArrayList<CategoryResponse>>(){}.getType();
+//            listResponse = gson.fromJson(dataRedis, listType);
+//        } else {
+//            logger.info("Kiem tra category database no cache");
+//
+//            String dataJson = gson.toJson(listResponse);
+//            redisTemplate.opsForValue().set("listCategory",dataJson);
+//        }
         return listResponse;
     }
 
@@ -72,6 +77,7 @@ public class CategoryService implements CategoryServiceImp {
     }
 
     @Override
+    @CacheEvict(cacheNames = "listCategory", allEntries = true)
     public CategoryResponse updateCategory(int id, CategoryRequest categoryRequest) {
         CategoryEntity existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -81,6 +87,7 @@ public class CategoryService implements CategoryServiceImp {
     }
 
     @Override
+    @CacheEvict(value = "listCategory", allEntries = true)
     public void deleteCategory(int id) {
         categoryRepository.deleteById(id);
     }

@@ -17,6 +17,10 @@ public interface ProductServiceImp {
 
     boolean deleteProductById(int id);
 
-    boolean modifyProductById(int id, ProductRequest productRequest);
+    boolean modifyProductById(int id, MultipartFile file,
+                              String title,
+                              double price,
+                              int idCategory,
+                              String tags);
 
 }

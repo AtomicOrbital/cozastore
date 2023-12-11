@@ -120,18 +120,31 @@ public class ProductService implements ProductServiceImp {
     }
 
     @Override
-    public boolean modifyProductById(int id, ProductRequest productRequest) {
+    public boolean modifyProductById(int id,
+                                     MultipartFile file,
+                                     String title,
+                                     double price,
+                                     int idCategory,
+                                     String tags) {
         boolean isSuccess = false;
         Optional<ProductEntity> optionalProductResponse = productRepository.findById(id);
-        if (optionalProductResponse.isPresent()){
+        boolean isSaveFile = fileStorageService.saveFile(file);
+        if (optionalProductResponse.isPresent() && isSaveFile){
             ProductEntity product = optionalProductResponse.get();
-            product.setTitle(productRequest.getTitle());
-            product.setPrice(productRequest.getPrice());
-            product.setImages(productRequest.getImages());
-            product.setTags(productRequest.getTags());
+            product.setTitle(title);
+            product.setPrice(price);
+
+            if (file != null && !file.isEmpty()) {
+                // Xử lý lưu trữ file
+                String fileName = file.getOriginalFilename();
+                product.setImages(fileName);
+            }
+
+            product.setTags(tags);
             CategoryEntity category = new CategoryEntity();
-            category.setId(productRequest.getIdCategory());
+            category.setId(idCategory);
             product.setIdCategory(category);
+
             productRepository.save(product);
             isSuccess = true;
         } else {

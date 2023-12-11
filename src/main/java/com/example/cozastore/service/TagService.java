@@ -11,6 +11,8 @@ import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class TagService implements TagServiceImp {
 
     private Gson gson = new Gson();
     @Override
+    @CacheEvict(value = "listTag", allEntries = true)
     public TagResponse createTag(TagRequest tagRequest) {
         TagEntity tagEntity = new TagEntity();
         tagEntity.setNameTag(tagRequest.getNameTag());
@@ -38,24 +41,26 @@ public class TagService implements TagServiceImp {
     }
 
     @Override
+    @Cacheable(value = "listTag")
     public List<TagResponse> getAllTags() {
         List<TagResponse> tagResponses = new ArrayList<>();
-        if(redisTemplate.hasKey("listTag")){
-            logger.info("Kiem tra cache listTag");
-            String dataRedis = redisTemplate.opsForValue().get("listTag").toString();
-            logger.info("Fetched from Redis: " + dataRedis);
-            Type listType = new TypeToken<ArrayList<TagResponse>>(){}.getType();
-            tagResponses = gson.fromJson(dataRedis, listType);
-        } else {
-            logger.info("Kiem tra tag database no cache");
-            List<TagEntity> tagEntities = tagRepository.findAll();
-            for(TagEntity tagEntity:tagEntities){
-                tagResponses.add(new TagResponse(tagEntity.getId(), tagEntity.getNameTag()));
-            }
-            String dataJson = gson.toJson(tagResponses);
-            logger.info("Saving to Redis: " + dataJson);
-            redisTemplate.opsForValue().set("listTag",dataJson);
+        List<TagEntity> tagEntities = tagRepository.findAll();
+        for(TagEntity tagEntity:tagEntities){
+            tagResponses.add(new TagResponse(tagEntity.getId(), tagEntity.getNameTag()));
         }
+//        if(redisTemplate.hasKey("listTag")){
+//            logger.info("Kiem tra cache listTag");
+//            String dataRedis = redisTemplate.opsForValue().get("listTag").toString();
+//            logger.info("Fetched from Redis: " + dataRedis);
+//            Type listType = new TypeToken<ArrayList<TagResponse>>(){}.getType();
+//            tagResponses = gson.fromJson(dataRedis, listType);
+//        } else {
+//            logger.info("Kiem tra tag database no cache");
+//
+//            String dataJson = gson.toJson(tagResponses);
+//            logger.info("Saving to Redis: " + dataJson);
+//            redisTemplate.opsForValue().set("listTag",dataJson);
+//        }
 
         return tagResponses;
     }
@@ -68,6 +73,7 @@ public class TagService implements TagServiceImp {
     }
 
     @Override
+    @CacheEvict(value = "listTag", allEntries = true)
     public TagResponse updateTag(int id, TagRequest tagRequest) {
         TagEntity existingTag = tagRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tag not found"));
@@ -77,6 +83,7 @@ public class TagService implements TagServiceImp {
     }
 
     @Override
+    @CacheEvict(value = "listTag", allEntries = true)
     public void deleteTag(int id) {
         tagRepository.deleteById(id);
     }

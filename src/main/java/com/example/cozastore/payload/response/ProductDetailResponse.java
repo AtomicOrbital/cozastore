@@ -2,9 +2,9 @@ package com.example.cozastore.payload.response;
 
 public class ProductDetailResponse {
     private int id;
-    private int idColor;
-    private int idProduct;
-    private int idSize;
+    private String nameColor;
+    private String nameProduct;
+    private String nameSize;
     private int quantity;
     private String description;
 
@@ -16,28 +16,28 @@ public class ProductDetailResponse {
         this.id = id;
     }
 
-    public int getIdColor() {
-        return idColor;
+    public String getNameColor() {
+        return nameColor;
     }
 
-    public void setIdColor(int idColor) {
-        this.idColor = idColor;
+    public void setNameColor(String nameColor) {
+        this.nameColor = nameColor;
     }
 
-    public int getIdProduct() {
-        return idProduct;
+    public String getNameProduct() {
+        return nameProduct;
     }
 
-    public void setIdProduct(int idProduct) {
-        this.idProduct = idProduct;
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
     }
 
-    public int getIdSize() {
-        return idSize;
+    public String getNameSize() {
+        return nameSize;
     }
 
-    public void setIdSize(int idSize) {
-        this.idSize = idSize;
+    public void setNameSize(String nameSize) {
+        this.nameSize = nameSize;
     }
 
     public int getQuantity() {
@@ -54,5 +54,8 @@ public class ProductDetailResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void getNameColor(String name) {
     }
 }

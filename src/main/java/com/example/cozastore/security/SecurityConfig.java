@@ -21,6 +21,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -62,16 +70,30 @@ public class SecurityConfig {
                 .build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable() // disable CSRF as using API
+        return httpSecurity
+                .cors().and()
+                .csrf().disable() // disable CSRF as using API
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // không sử dụng session
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").permitAll() // Allow without authentication
                 .antMatchers(HttpMethod.GET,"/api/images/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/category").permitAll()
+                .antMatchers(HttpMethod.GET,"/category/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/tags/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/product/**").permitAll()
 //                .antMatchers(HttpMethod.POST, "/product/**").permitAll()
 //                .antMatchers(HttpMethod.DELETE, "/product/**").permitAll()

@@ -100,10 +100,15 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> modifyProductFromId(@PathVariable int id, @RequestBody ProductRequest productRequest){
+    public ResponseEntity<?> modifyProductFromId(@PathVariable int id,
+                                                 @RequestParam MultipartFile file,
+                                                 @RequestParam String title,
+                                                 @RequestParam double price,
+                                                 @RequestParam int idCategory,
+                                                 @RequestParam String tags){
         BaseResponse baseResponse = new BaseResponse();
         try {
-            boolean isSuccess = productServiceImp.modifyProductById(id, productRequest);
+            boolean isSuccess = productServiceImp.modifyProductById(id, file,title,price,idCategory,tags);
             baseResponse.setMessage("Updated Product Successfully");
             baseResponse.setData(isSuccess);
             return ResponseEntity.ok(isSuccess);

@@ -1,11 +1,24 @@
 package com.example.cozastore.payload.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ProductRequest {
     private String images;
     private String title;
     private float price;
     private int idCategory;
     private String tags;
+
+    public ProductRequest() {
+    }
+
+    public ProductRequest(String images, String title, float price, int idCategory, String tags) {
+        this.images = images;
+        this.title = title;
+        this.price = price;
+        this.idCategory = idCategory;
+        this.tags = tags;
+    }
 
     public String getImages() {
         return images;
